@@ -54,6 +54,17 @@ print(createSession)
 sessionId = createSession['result']['id']
 print(sessionId)
 
+load_profile = send_message({
+    "id": 1,
+    "jsonrpc": "2.0",
+    "method": "setupProfile",
+    "params": {
+        "cortexToken": cortexToken,
+        "headset": "EPOCX-E5020501",
+        "profile": "aryaman",
+        "status": "load"
+    }
+})
 
 subscribe = send_message({
     "id": 1,
@@ -62,29 +73,17 @@ subscribe = send_message({
     "params": {
         "cortexToken": cortexToken,
         "session": sessionId,
-        "streams": ["mot"]
+        "streams": ["mot", "com", "fac"]
     }
 })
 
+ws.recv()
 subscribe = json.loads(subscribe)
 print(subscribe)
 
 print( "Sent")
 print( "Receiving...")
 
-result = ws.recv()
-result = json.loads(result)
-prev_left_x = result["mot"][2]
-prev_left_y = result["mot"][3]
-prev_right_x = result["mot"][5]
-prev_right_y = result["mot"][6]
-
-print(
-    "Left X: ", prev_left_x, 
-    "Left Y: ", prev_left_y, 
-    "Right X: ", prev_right_x, 
-    "Right Y: ", prev_right_y
-)
 
 def give_roll_pitch(quat):
     # Normalize the quaternion
@@ -113,31 +112,42 @@ init_mapped_roll, init_mapped_pitch = give_roll_pitch(result["mot"][8:12])
 
 while True:
     result = ws.recv()
-    print("Received ", result)
+    # print("Received ", result)
     result = json.loads(result)
     
-    left_x = result["mot"][8]
-    left_y = result["mot"][9]
-    right_x = result["mot"][10]
-    right_y = result["mot"][11]
+    if "com" in result:
+        action = result["com"][0]
+        power = result["com"][1]
 
-    quat = [left_x, left_y, right_x, right_y]
-    # gamepad.left_joystick_float(x_value_float= left_x - prev_left_x , y_value_float = left_y - prev_left_y)
+        if action == "push" and power >= 0.5:
+            gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+            print("Received ", result)
+        # if action == "lift" and power >= 0.5:
+        #     gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP )
+        #     print("Received ", result)
+        else:
+            gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+            # gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP )
+        
 
-    mapped_roll, mapped_pitch = give_roll_pitch(quat)
+    elif "mot" in result:
+        quat = [result["mot"][8], result["mot"][9], result["mot"][10], result["mot"][11]]
+        mapped_roll, mapped_pitch = give_roll_pitch(quat)
 
-    # gamepad.right_joystick_float(x_value_float=right_x - prev_right_x, y_value_float=right_y - prev_right_y)
-    gamepad.right_joystick_float(x_value_float= mapped_roll - init_mapped_roll , y_value_float = mapped_pitch - init_mapped_pitch)
-    # print(
-    #     "x = ", prev_right_x - right_x,
-    #     "y = ", prev_right_y - right_y
-    # )
-    # prev_left_x = left_x
-    # prev_left_y = left_y
-    # prev_right_x = right_x
-    # prev_right_y = right_y
+        gamepad.right_joystick_float(x_value_float= mapped_roll - init_mapped_roll , y_value_float = mapped_pitch - init_mapped_pitch)
 
-    # gamepad.left_joystick_float(x_value_float=right_x, y_value_float=right_y)
-    # gamepad.right_joystick_float(x_value_float=left_x, y_value_float=lef`t_y)
+    elif "fac" in result:
+        action = result["fac"][3]
+        power = result["fac"][4]
+
+        if action == "smile" and power >= 0.8:
+            gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+            print("Received ", result)
+        else:
+            gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+
+        # print("Received ", result)
+
     gamepad.update()
+
 ws.close
