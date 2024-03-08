@@ -1,13 +1,13 @@
 import UIKit
 import SwiftUI
-
+import Supabase
+      
 struct MyViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ViewController {
         return ViewController()
     }
     
     func updateUIViewController(_ uiViewController: ViewController, context: Context) {
-        // Update the view controller if needed
     }
 }
 
@@ -27,138 +27,130 @@ class CustomDropdownButton: UIButton {
     var parentButtonObj: UIButton = UIButton()
     
 }
+struct shortcutTable: Decodable {
+    let shortcut_list: [String]
+}
+
+let client = SupabaseClient(supabaseURL: URL(string:  ProcessInfo.processInfo.environment["SUPABASE_KEY"])!, supabaseKey:  ProcessInfo.processInfo.environment["SUPABASE_KEY"])
 
 
 class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDelegate {
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-            return true
-        }
 
-        func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
-            return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
-        }
-
-        func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        }
-
-    
     var dropdownMenus = [UIButton: [String]]()
     var availableOptions = [String: ButtonShortcut]()
-    
+    var options = [String]()
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        NSUserActivity.current?.delegate = self
-        view.backgroundColor = UIColor.white // Background color
+
         
-        // Title Label
+        view.backgroundColor = UIColor.white
+        
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 50, width: view.frame.width, height: 50))
         titleLabel.text = "Smooth Moves"
         titleLabel.textAlignment = .center
         titleLabel.font = UIFont.boldSystemFont(ofSize: 40)
         view.addSubview(titleLabel)
         
-        // Button Names
         let buttonNames = ["A", "B", "C", "D", "E", "F", "G", "H"]
         
-        // Button Positions
         let buttonX: CGFloat = 50
         var buttonY: CGFloat = 150
-        let buttonWidth: CGFloat = 250 // Increased width
-        let buttonHeight: CGFloat = 50 // Increased height
+        let buttonWidth: CGFloat = 250
+        let buttonHeight: CGFloat = 50
         let spacing: CGFloat = 15
         
-        // Dropdown Options
-        let options = ["Shortcut A", "Shortcut B", "Shortcut C", "Shortcut D", "Shortcut E", "Shortcut F", "Shortcut G", "Shortcut H"]
+        let button = UIButton(type: .system)
+        button.frame = CGRect(x: buttonX, y: buttonY-50, width: buttonWidth, height: buttonHeight)
+        button.setTitle("name", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+        button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Button color
+        button.layer.cornerRadius = 10 // Rounded corners
+        button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+        view.addSubview(button)
+        
         
         for name in buttonNames {
-            // Create Button
             let button = UIButton(type: .system)
             button.frame = CGRect(x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight)
             button.setTitle(name, for: .normal)
             button.setTitleColor(.black, for: .normal)
-            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24) // Larger font
-            button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Button color
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+            button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
             button.layer.cornerRadius = 10 // Rounded corners
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             view.addSubview(button)
             
-            // Create Dropdown Button
             let dropdownButton = CustomDropdownButton(type: .custom)
             dropdownButton.frame = CGRect(x: button.frame.maxX + 10, y: buttonY, width: 30, height: buttonHeight)
             dropdownButton.setTitle("▼", for: .normal)
-            dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24) // Larger font
-            //dropdownButton.tintColor = UIColor.black
-            dropdownButton.backgroundColor = UIColor.black // Dropdown button color
-            
-            // Dropdown button background color
+            dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+            dropdownButton.backgroundColor = UIColor.black //
             dropdownButton.layer.cornerRadius = 5 // Rounded corners
             dropdownButton.layer.borderColor = UIColor.black.cgColor
             dropdownButton.layer.borderWidth = 5
             dropdownButton.addTarget(self, action: #selector(dropdownTapped(_:)), for: .touchUpInside)
             dropdownButton.parentButtonObj = button
-            
             view.addSubview(dropdownButton)
-            // Store Dropdown Options for each button
-            buttonOptions[name] = Set(options) // Mapping button titles to options
+            buttonOptions[name] = Set(options)
             availableOptions[name] = ButtonShortcut(shortcutName: "Shortcut \(name)")
             buttonY += buttonHeight + spacing
         }
         
-        // Make the view scrollable
         let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        scrollView.contentSize = CGSize(width: view.frame.width, height: buttonY + spacing) // Adjust content size
+        scrollView.contentSize = CGSize(width: view.frame.width, height: buttonY + spacing)
         scrollView.addSubview(view)
         view = scrollView
         
     }
 
+    @objc func buttonPressed(_ sender: UIButton) {
+        Task {
+                    await getShortcutsList()
+            }
+    }
+        
+    
     @objc func buttonTapped(_ sender: UIButton) {
         print("Button \(sender.title(for: .normal) ?? "") tapped.")
         
         guard let buttonName = sender.title(for: .normal) else { return }
         guard let buttonShortcut = availableOptions[buttonName] else { return }
         
-        // Execute the shortcut with the corresponding name
         if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(buttonShortcut.shortcutName)") {
             UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
         }
         
-        if let shortCutNames = UIPasteboard.general.string {
-            //print(string)
-            //buttonOptions[name] = shortCutNames
-            sender.setTitle(shortCutNames, for: .normal)
-        }
     }
     
-    @objc func dropdownTapped(_ sender: CustomDropdownButton) {
+    @objc func dropdownTapped(_ sender: CustomDropdownButton)  {
+        
+        //print(options)
+        
         guard let button = sender.superview?.subviews.compactMap({ $0 as? UIButton }).first(where: { $0.title(for: .normal) != nil }) else { return }
         
         guard let buttonName = button.title(for: .normal) else { return }
-        
+                
         let dropdownMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        for option in (buttonOptions[buttonName]?.sorted() ?? []) {
+        for option in options {
             dropdownMenu.addAction(UIAlertAction(title: option, style: .default, handler: { (_) in
                 print("Selected option: \(option)")
                 self.updateAvailableOptions(selectedOption: option)
                 sender.isEnabled = false
                 
-                // Adjusting parentButtonObj position and size
                 let parentButtonObj = sender.parentButtonObj
                 let newWidth = parentButtonObj.frame.width / 2
-                let newX = dropdownMenu.view.frame.origin.x - newWidth// Subtract newWidth from sender's minX
+                let newX = dropdownMenu.view.frame.origin.x - newWidth
                 parentButtonObj.frame = CGRect(
                     x: newX+167, y: sender.frame.origin.y,
                     width: newWidth, height: sender.frame.height)
                 
                 let verticalSpacing: CGFloat = 10
-                    
-                    // Positioning the new button relative to parentButtonObj
-                let buttonWidth = newWidth - 10  // Reducing button width
-                let buttonX = parentButtonObj.frame.origin.x + parentButtonObj.frame.width + verticalSpacing // Adjusting button X position
+                let buttonWidth = newWidth - 10
+                let buttonX = parentButtonObj.frame.origin.x + parentButtonObj.frame.width + verticalSpacing
                 let buttonY = parentButtonObj.frame.origin.y
                 let buttonHeight = sender.frame.height
                 let button = UIButton(type: .system)
@@ -167,10 +159,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                         width: buttonWidth, height: buttonHeight)
                     button.setTitle(option, for: .normal)
                     button.setTitleColor(.black, for: .normal)
-                    button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24) // Larger font
-                    button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3) // Button color
-                    button.layer.cornerRadius = 10 // Rounded corners
-                    // button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+                    button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
+                    button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+                    button.layer.cornerRadius = 10
                     self.view.addSubview(button)
             }))
                                                 
@@ -183,8 +174,27 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
             popoverController.sourceRect = sender.bounds
         }
         
-        present(dropdownMenu, animated: true, completion: nil)
+        self.present(dropdownMenu, animated: true, completion: nil)
     
+    }
+    
+    func getShortcutsList() async {
+        
+        do {
+            let shorties: [shortcutTable] = try await client.database.from("smooth-moves").select("shortcut_list").execute().value
+            options = []
+
+                if let lastShortcutTable = shorties.last {
+                    lastShortcutTable.shortcut_list.forEach { element in
+                        options.append(element)
+                    }
+                    
+                } else {
+                    print("The array is empty.")
+            }
+        } catch{
+            debugPrint(error)
+        }
     }
 
     func updateAvailableOptions(selectedOption: String) {
@@ -199,7 +209,6 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
             // Extract output or relevant information
             if let output = activity.userInfo?["yourOutputKey"] as? String {
                 print("Received output from shortcut: \(output)")
-                // Now you can use the output as needed in your app
             }
         }
     }
