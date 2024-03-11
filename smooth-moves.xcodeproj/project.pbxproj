@@ -13,50 +13,9 @@
 		804A76BE2B8E469000A6FC11 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76BD2B8E469000A6FC11 /* Item.swift */; };
 		804A76C02B8E469400A6FC11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 804A76BF2B8E469400A6FC11 /* Assets.xcassets */; };
 		804A76C32B8E469400A6FC11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 804A76C22B8E469400A6FC11 /* Preview Assets.xcassets */; };
-		804A76CD2B8E469400A6FC11 /* smooth_movesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76CC2B8E469400A6FC11 /* smooth_movesTests.swift */; };
-		804A76D72B8E469400A6FC11 /* smooth_movesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76D62B8E469400A6FC11 /* smooth_movesUITests.swift */; };
-		804A76D92B8E469400A6FC11 /* smooth_movesUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76D82B8E469400A6FC11 /* smooth_movesUITestsLaunchTests.swift */; };
 		804A76F12B8E4F1100A6FC11 /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76F02B8E4F1100A6FC11 /* Intent.swift */; };
-		80823E502B93037100196F1C /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80265BCD2B92580900ED8DF9 /* Intents.framework */; };
-		80823E532B93037100196F1C /* IntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80823E522B93037100196F1C /* IntentHandler.swift */; };
-		80823E5A2B93037100196F1C /* IntentsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80265BD82B92580A00ED8DF9 /* IntentsUI.framework */; };
-		80823E5D2B93037100196F1C /* IntentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80823E5C2B93037100196F1C /* IntentViewController.swift */; };
-		80823E602B93037100196F1C /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80823E5E2B93037100196F1C /* MainInterface.storyboard */; };
-		80823E642B93037100196F1C /* smoothyUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 80823E592B93037100196F1C /* smoothyUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		80823E672B93037100196F1C /* smoothy.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 80823E4F2B93037100196F1C /* smoothy.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		808289342B99B45900A0C359 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 808289332B99B45900A0C359 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		804A76C92B8E469400A6FC11 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 804A76AE2B8E469000A6FC11 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 804A76B52B8E469000A6FC11;
-			remoteInfo = "smooth-moves";
-		};
-		804A76D32B8E469400A6FC11 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 804A76AE2B8E469000A6FC11 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 804A76B52B8E469000A6FC11;
-			remoteInfo = "smooth-moves";
-		};
-		80823E622B93037100196F1C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 804A76AE2B8E469000A6FC11 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 80823E582B93037100196F1C;
-			remoteInfo = smoothyUI;
-		};
-		80823E652B93037100196F1C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 804A76AE2B8E469000A6FC11 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 80823E4E2B93037100196F1C;
-			remoteInfo = smoothy;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		80265BED2B92580A00ED8DF9 /* Embed Foundation Extensions */ = {
@@ -65,8 +24,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				80823E672B93037100196F1C /* smoothy.appex in Embed Foundation Extensions */,
-				80823E642B93037100196F1C /* smoothyUI.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -83,20 +40,8 @@
 		804A76BD2B8E469000A6FC11 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		804A76BF2B8E469400A6FC11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		804A76C22B8E469400A6FC11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		804A76C82B8E469400A6FC11 /* smooth-movesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "smooth-movesTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		804A76CC2B8E469400A6FC11 /* smooth_movesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smooth_movesTests.swift; sourceTree = "<group>"; };
-		804A76D22B8E469400A6FC11 /* smooth-movesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "smooth-movesUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		804A76D62B8E469400A6FC11 /* smooth_movesUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smooth_movesUITests.swift; sourceTree = "<group>"; };
-		804A76D82B8E469400A6FC11 /* smooth_movesUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smooth_movesUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		804A76E72B8E46E700A6FC11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		804A76F02B8E4F1100A6FC11 /* Intent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intent.swift; sourceTree = "<group>"; };
-		80823E4F2B93037100196F1C /* smoothy.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = smoothy.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		80823E522B93037100196F1C /* IntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentHandler.swift; sourceTree = "<group>"; };
-		80823E542B93037100196F1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		80823E592B93037100196F1C /* smoothyUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = smoothyUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		80823E5C2B93037100196F1C /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
-		80823E5F2B93037100196F1C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
-		80823E612B93037100196F1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		808289332B99B45900A0C359 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -105,36 +50,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		804A76C52B8E469400A6FC11 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		804A76CF2B8E469400A6FC11 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		80823E4C2B93037100196F1C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80823E502B93037100196F1C /* Intents.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		80823E562B93037100196F1C /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80823E5A2B93037100196F1C /* IntentsUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,10 +70,6 @@
 			children = (
 				80265BEE2B92582D00ED8DF9 /* Intents.intentdefinition */,
 				804A76B82B8E469000A6FC11 /* smooth-moves */,
-				804A76CB2B8E469400A6FC11 /* smooth-movesTests */,
-				804A76D52B8E469400A6FC11 /* smooth-movesUITests */,
-				80823E512B93037100196F1C /* smoothy */,
-				80823E5B2B93037100196F1C /* smoothyUI */,
 				80265BCC2B92580900ED8DF9 /* Frameworks */,
 				804A76B72B8E469000A6FC11 /* Products */,
 			);
@@ -168,10 +79,6 @@
 			isa = PBXGroup;
 			children = (
 				804A76B62B8E469000A6FC11 /* smooth-moves.app */,
-				804A76C82B8E469400A6FC11 /* smooth-movesTests.xctest */,
-				804A76D22B8E469400A6FC11 /* smooth-movesUITests.xctest */,
-				80823E4F2B93037100196F1C /* smoothy.appex */,
-				80823E592B93037100196F1C /* smoothyUI.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -199,42 +106,6 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		804A76CB2B8E469400A6FC11 /* smooth-movesTests */ = {
-			isa = PBXGroup;
-			children = (
-				804A76CC2B8E469400A6FC11 /* smooth_movesTests.swift */,
-			);
-			path = "smooth-movesTests";
-			sourceTree = "<group>";
-		};
-		804A76D52B8E469400A6FC11 /* smooth-movesUITests */ = {
-			isa = PBXGroup;
-			children = (
-				804A76D62B8E469400A6FC11 /* smooth_movesUITests.swift */,
-				804A76D82B8E469400A6FC11 /* smooth_movesUITestsLaunchTests.swift */,
-			);
-			path = "smooth-movesUITests";
-			sourceTree = "<group>";
-		};
-		80823E512B93037100196F1C /* smoothy */ = {
-			isa = PBXGroup;
-			children = (
-				80823E522B93037100196F1C /* IntentHandler.swift */,
-				80823E542B93037100196F1C /* Info.plist */,
-			);
-			path = smoothy;
-			sourceTree = "<group>";
-		};
-		80823E5B2B93037100196F1C /* smoothyUI */ = {
-			isa = PBXGroup;
-			children = (
-				80823E5C2B93037100196F1C /* IntentViewController.swift */,
-				80823E5E2B93037100196F1C /* MainInterface.storyboard */,
-				80823E612B93037100196F1C /* Info.plist */,
-			);
-			path = smoothyUI;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -251,83 +122,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				80823E632B93037100196F1C /* PBXTargetDependency */,
-				80823E662B93037100196F1C /* PBXTargetDependency */,
 			);
 			name = "smooth-moves";
 			productName = "smooth-moves";
 			productReference = 804A76B62B8E469000A6FC11 /* smooth-moves.app */;
 			productType = "com.apple.product-type.application";
-		};
-		804A76C72B8E469400A6FC11 /* smooth-movesTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 804A76DF2B8E469400A6FC11 /* Build configuration list for PBXNativeTarget "smooth-movesTests" */;
-			buildPhases = (
-				804A76C42B8E469400A6FC11 /* Sources */,
-				804A76C52B8E469400A6FC11 /* Frameworks */,
-				804A76C62B8E469400A6FC11 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				804A76CA2B8E469400A6FC11 /* PBXTargetDependency */,
-			);
-			name = "smooth-movesTests";
-			productName = "smooth-movesTests";
-			productReference = 804A76C82B8E469400A6FC11 /* smooth-movesTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		804A76D12B8E469400A6FC11 /* smooth-movesUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 804A76E22B8E469400A6FC11 /* Build configuration list for PBXNativeTarget "smooth-movesUITests" */;
-			buildPhases = (
-				804A76CE2B8E469400A6FC11 /* Sources */,
-				804A76CF2B8E469400A6FC11 /* Frameworks */,
-				804A76D02B8E469400A6FC11 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				804A76D42B8E469400A6FC11 /* PBXTargetDependency */,
-			);
-			name = "smooth-movesUITests";
-			productName = "smooth-movesUITests";
-			productReference = 804A76D22B8E469400A6FC11 /* smooth-movesUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
-		80823E4E2B93037100196F1C /* smoothy */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 80823E6B2B93037100196F1C /* Build configuration list for PBXNativeTarget "smoothy" */;
-			buildPhases = (
-				80823E4B2B93037100196F1C /* Sources */,
-				80823E4C2B93037100196F1C /* Frameworks */,
-				80823E4D2B93037100196F1C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = smoothy;
-			productName = smoothy;
-			productReference = 80823E4F2B93037100196F1C /* smoothy.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
-		80823E582B93037100196F1C /* smoothyUI */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 80823E682B93037100196F1C /* Build configuration list for PBXNativeTarget "smoothyUI" */;
-			buildPhases = (
-				80823E552B93037100196F1C /* Sources */,
-				80823E562B93037100196F1C /* Frameworks */,
-				80823E572B93037100196F1C /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = smoothyUI;
-			productName = smoothyUI;
-			productReference = 80823E592B93037100196F1C /* smoothyUI.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -340,20 +139,6 @@
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					804A76B52B8E469000A6FC11 = {
-						CreatedOnToolsVersion = 15.2;
-					};
-					804A76C72B8E469400A6FC11 = {
-						CreatedOnToolsVersion = 15.2;
-						TestTargetID = 804A76B52B8E469000A6FC11;
-					};
-					804A76D12B8E469400A6FC11 = {
-						CreatedOnToolsVersion = 15.2;
-						TestTargetID = 804A76B52B8E469000A6FC11;
-					};
-					80823E4E2B93037100196F1C = {
-						CreatedOnToolsVersion = 15.2;
-					};
-					80823E582B93037100196F1C = {
 						CreatedOnToolsVersion = 15.2;
 					};
 				};
@@ -372,10 +157,6 @@
 			projectRoot = "";
 			targets = (
 				804A76B52B8E469000A6FC11 /* smooth-moves */,
-				804A76C72B8E469400A6FC11 /* smooth-movesTests */,
-				804A76D12B8E469400A6FC11 /* smooth-movesUITests */,
-				80823E4E2B93037100196F1C /* smoothy */,
-				80823E582B93037100196F1C /* smoothyUI */,
 			);
 		};
 /* End PBXProject section */
@@ -388,35 +169,6 @@
 				804A76C32B8E469400A6FC11 /* Preview Assets.xcassets in Resources */,
 				804A76C02B8E469400A6FC11 /* Assets.xcassets in Resources */,
 				808289342B99B45900A0C359 /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		804A76C62B8E469400A6FC11 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		804A76D02B8E469400A6FC11 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		80823E4D2B93037100196F1C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		80823E572B93037100196F1C /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80823E602B93037100196F1C /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,74 +207,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		804A76C42B8E469400A6FC11 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				804A76CD2B8E469400A6FC11 /* smooth_movesTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		804A76CE2B8E469400A6FC11 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				804A76D72B8E469400A6FC11 /* smooth_movesUITests.swift in Sources */,
-				804A76D92B8E469400A6FC11 /* smooth_movesUITestsLaunchTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		80823E4B2B93037100196F1C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80823E532B93037100196F1C /* IntentHandler.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		80823E552B93037100196F1C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				80823E5D2B93037100196F1C /* IntentViewController.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		804A76CA2B8E469400A6FC11 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 804A76B52B8E469000A6FC11 /* smooth-moves */;
-			targetProxy = 804A76C92B8E469400A6FC11 /* PBXContainerItemProxy */;
-		};
-		804A76D42B8E469400A6FC11 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 804A76B52B8E469000A6FC11 /* smooth-moves */;
-			targetProxy = 804A76D32B8E469400A6FC11 /* PBXContainerItemProxy */;
-		};
-		80823E632B93037100196F1C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 80823E582B93037100196F1C /* smoothyUI */;
-			targetProxy = 80823E622B93037100196F1C /* PBXContainerItemProxy */;
-		};
-		80823E662B93037100196F1C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 80823E4E2B93037100196F1C /* smoothy */;
-			targetProxy = 80823E652B93037100196F1C /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		80823E5E2B93037100196F1C /* MainInterface.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				80823E5F2B93037100196F1C /* Base */,
-			);
-			name = MainInterface.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		804A76DA2B8E469400A6FC11 /* Debug */ = {
@@ -647,7 +332,6 @@
 		804A76DD2B8E469400A6FC11 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -678,7 +362,6 @@
 		804A76DE2B8E469400A6FC11 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
@@ -706,182 +389,6 @@
 			};
 			name = Release;
 		};
-		804A76E02B8E469400A6FC11 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-movesTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smooth-moves.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/smooth-moves";
-			};
-			name = Debug;
-		};
-		804A76E12B8E469400A6FC11 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-movesTests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smooth-moves.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/smooth-moves";
-			};
-			name = Release;
-		};
-		804A76E32B8E469400A6FC11 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-movesUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "smooth-moves";
-			};
-			name = Debug;
-		};
-		804A76E42B8E469400A6FC11 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-movesUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "smooth-moves";
-			};
-			name = Release;
-		};
-		80823E692B93037100196F1C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = smoothyUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = smoothyUI;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-moves.smoothyUI";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		80823E6A2B93037100196F1C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = smoothyUI/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = smoothyUI;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-moves.smoothyUI";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		80823E6C2B93037100196F1C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = smoothy/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = smoothy;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-moves.smoothy";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		80823E6D2B93037100196F1C /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = FHGTGQ8ZTH;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = smoothy/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = smoothy;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "vaibhav.smooth-moves.smoothy";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -899,42 +406,6 @@
 			buildConfigurations = (
 				804A76DD2B8E469400A6FC11 /* Debug */,
 				804A76DE2B8E469400A6FC11 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		804A76DF2B8E469400A6FC11 /* Build configuration list for PBXNativeTarget "smooth-movesTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				804A76E02B8E469400A6FC11 /* Debug */,
-				804A76E12B8E469400A6FC11 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		804A76E22B8E469400A6FC11 /* Build configuration list for PBXNativeTarget "smooth-movesUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				804A76E32B8E469400A6FC11 /* Debug */,
-				804A76E42B8E469400A6FC11 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		80823E682B93037100196F1C /* Build configuration list for PBXNativeTarget "smoothyUI" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				80823E692B93037100196F1C /* Debug */,
-				80823E6A2B93037100196F1C /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
-		80823E6B2B93037100196F1C /* Build configuration list for PBXNativeTarget "smoothy" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				80823E6C2B93037100196F1C /* Debug */,
-				80823E6D2B93037100196F1C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
