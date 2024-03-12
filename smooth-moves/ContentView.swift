@@ -31,12 +31,18 @@ struct shortcutTable: Decodable {
     let shortcut_list: [String]
 }
 
+class removedShortcutButton: UIButton{
+    var dropDownButtonObj: CustomDropdownButton = CustomDropdownButton()
+}
+
+var forbiddenOptionsList = [String]()
 var options = [String]()
 var buttonMappingDict = [String: String]()
 
+var commandButtonList = [UIButton]()
+
 class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDelegate {
 
-    let chutiyaButtonNumberOne: CustomDropdownButton = CustomDropdownButton()
     let buttonX: CGFloat = 50
     var buttonY: CGFloat = 150
     let buttonWidth: CGFloat = 250
@@ -111,6 +117,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 let spacing: CGFloat = 15
                 self.createButton(name: option, atYPosition: self.buttonY)
                 self.buttonY += buttonHeight + spacing
+                
             }))
         }
         
@@ -134,6 +141,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         let dropdownMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         for option in options {
+            if(forbiddenOptionsList.contains(option)){
+                continue
+            }
             dropdownMenu.addAction(UIAlertAction(title: option, style: .default, handler: { (_) in
                 print("Selected option: \(option)")
                 self.updateAvailableOptions(selectedOption: option)
@@ -151,8 +161,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 let buttonX = parentButtonObj.frame.origin.x + parentButtonObj.frame.width + verticalSpacing
                 let buttonY = parentButtonObj.frame.origin.y
                 let buttonHeight = sender.frame.height
-                let button = UIButton(type: .system)
-                    button.frame = CGRect(
+                
+                let button = removedShortcutButton(type: .custom)
+                button.frame = CGRect(
                         x: buttonX, y: buttonY,
                         width: buttonWidth, height: buttonHeight)
                 button.setTitle(option, for: .normal)
@@ -160,9 +171,11 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
                 button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
                 button.layer.cornerRadius = 10
-                button.addTarget(self, action: #selector(self.dropDownHelper), for: .touchUpInside)
-
+                button.addTarget(self, action: #selector(self.removeShortcutButton(_:)), for: .touchUpInside)
+                button.dropDownButtonObj = sender
                 self.view.addSubview(button)
+                
+                forbiddenOptionsList.append(option)
                 
                 buttonMappingDict[parentButtonObj.title(for: .normal)!] = option
             }))
@@ -178,13 +191,25 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         self.present(dropdownMenu, animated: true, completion: nil)
     }
     
-    @objc func dropDownHelper(_ button: UIButton) {
-        guard let dropDownButton = findDropdownButton(from: button) else {
-            return
+    @objc func removeShortcutButton(_ button: removedShortcutButton) {
+        button.dropDownButtonObj.isEnabled = true
+        print(2)
+        if let name = button.title(for: .normal) {
+            forbiddenOptionsList.removeAll { $0 == name }
+            
+            for (key, value) in buttonMappingDict{
+                
+                if value == name{
+                    for obj in commandButtonList{
+                        if(obj.title(for: .normal) == key){
+                            obj.setTitle("test", for: .normal)
+                        }
+                    }
+                    buttonMappingDict.removeValue(forKey: key)
+                }
+            }
         }
-        print("1")
-        removeShortcutButton(button, dropDownButton: dropDownButton)
-        print("3")
+        button.removeFromSuperview()
     }
 
     func findDropdownButton(from view: UIView) -> CustomDropdownButton? {
@@ -197,16 +222,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }
         return nil
     }
-
-       
-   @objc func removeShortcutButton(_ button: UIButton, dropDownButton: CustomDropdownButton) {
-       dropDownButton.isEnabled = true
-       print(2)
-       if let name = button.title(for: .normal) {
-           options.append(name)
-           print("Button \(name) added back to options")
-       }
-   }
+   
     func createButton(name: String, atYPosition yPos: CGFloat) {
         
         let button = UIButton(type: .system)
@@ -231,8 +247,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         dropdownButton.parentButtonObj = button
         view.addSubview(dropdownButton)
         buttonOptions[name] = Set(options)
+        
+        commandButtonList.append(button)
     }
-    
     
     func getShortcutsList() async {
         do {
@@ -243,7 +260,6 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                     lastShortcutTable.shortcut_list.forEach { element in
                         options.append(element)
                     }
-                    
                 } else {
                     print("The array is empty.")
             }
