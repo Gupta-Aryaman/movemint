@@ -8,6 +8,8 @@
 
 import Intents
 
+//let client = SupabaseClient(supabaseURL: URL(string: "https://sdnughqozcihjgayznuf.supabase.co")!, supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkbnVnaHFvemNpaGpnYXl6bnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MDE1MTEsImV4cCI6MjAyNTM3NzUxMX0.KQWPMpj-CWPAVExhwJ6yDG_17lAKkNAizmNvMmHytWs")
+
 // As an example, this class is set up to handle Message intents.
 // You will want to replace this or add other intents as appropriate.
 // The intents you wish to handle must be declared in the extension's Info.plist.
