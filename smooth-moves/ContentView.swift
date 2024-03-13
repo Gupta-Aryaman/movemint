@@ -1,7 +1,11 @@
 import UIKit
+import FirebaseDatabaseInternal
 import SwiftUI
 import Supabase
-      
+import FirebaseCore
+import FirebaseFirestore
+import FirebaseAuth
+
 struct MyViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ViewController {
         
@@ -35,6 +39,7 @@ struct shortcutTable: Decodable {
 class removedShortcutButton: UIButton{
     var dropDownButtonObj: CustomDropdownButton = CustomDropdownButton()
 }
+let client = SupabaseClient(supabaseURL: URL(string: "url")!, supabaseKey: "supabase key")
 
 var forbiddenOptionsList = [String]()
 var options = [String]()
@@ -51,15 +56,21 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     let spacing: CGFloat = 15
     var vert: CGFloat = 150
     var buttonTypes = ["push", "pull", "smile", "blink left eye", "blink right eye"]
+    var ref: DatabaseReference!
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        FirebaseApp.configure()
+        self.ref = Database.database().reference() //fill up firebase url
+        Task {
+                await monitorFirebase()
+        }
         view.backgroundColor = UIColor.black
         let titleLabel = UILabel()
         titleLabel.text = "Smooth Moves"
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.systemFont(ofSize: 32)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
         titleLabel.textColor = UIColor.systemBlue
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
                 view.addSubview(titleLabel)
@@ -223,20 +234,17 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         button.dropDownButtonObj.isEnabled = true
         if let name = button.title(for: .normal) {
             forbiddenOptionsList.removeAll { $0 == name }
-            
-            // Iterate through buttonMappingDict to find the button corresponding to the removed shortcut
             for (key, value) in buttonMappingDict{
                 if value == name {
                     for obj in commandButtonList {
                         if obj.title(for: .normal) == key {
-                            // Update button properties
                             obj.setTitle(key, for: .normal)
                             obj.setTitleColor(.systemBlue, for: .normal)
                             obj.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .light)
                             obj.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
                             obj.layer.cornerRadius = 10
                             let newWidth = min(buttonWidth, obj.frame.width + buttonWidth)
-                                                    obj.frame.size.width = newWidth
+                            obj.frame.size.width = newWidth
                             buttonMappingDict.removeValue(forKey: key)
                         }
                     }
@@ -320,5 +328,87 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 print("Received output from shortcut: \(output)")
             }
         }
+    }
+    
+    func monitorFirebase() async{
+        ref.child("blink left eye").observe(.value, with: {snapshot in
+            if let value = snapshot.value as? NSDictionary,
+                let enabled = value["enabled"] as? Int {
+                if(enabled == 1){
+                    
+                    if let title = buttonMappingDict["blink left eye"] {
+                        if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
+                            UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    
+                    self.ref.child("blink left eye").updateChildValues(["enabled": false])
+                }
+            }
+        })
+        
+        ref.child("blink right eye").observe(.value, with: {snapshot in
+            if let value = snapshot.value as? NSDictionary,
+                let enabled = value["enabled"] as? Int {
+                if(enabled == 1){
+                    
+                    if let title = buttonMappingDict["blink right eye"] {
+                        if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
+                            UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    
+                    self.ref.child("blink right eye").updateChildValues(["enabled": false])
+                }
+            }
+        })
+        
+        ref.child("smile").observe(.value, with: {snapshot in
+            if let value = snapshot.value as? NSDictionary,
+                let enabled = value["enabled"] as? Int {
+                if(enabled == 1){
+                    
+                    if let title = buttonMappingDict["smile"] {
+                        if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
+                            UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    
+                    self.ref.child("smile").updateChildValues(["enabled": false])
+                }
+            }
+        })
+        
+        ref.child("push").observe(.value, with: {snapshot in
+            if let value = snapshot.value as? NSDictionary,
+                let enabled = value["enabled"] as? Int {
+                if(enabled == 1){
+                    
+                    if let title = buttonMappingDict["push"] {
+                        if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
+                            UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    
+                    self.ref.child("push").updateChildValues(["enabled": false])
+                }
+            }
+        })
+        
+        ref.child("pull").observe(.value, with: {snapshot in
+            if let value = snapshot.value as? NSDictionary,
+                let enabled = value["enabled"] as? Int {
+                if(enabled == 1){
+                    
+                    if let title = buttonMappingDict["pull"] {
+                        if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
+                            UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+                        }
+                    }
+                    
+                    self.ref.child("pull").updateChildValues(["enabled": false])
+                }
+            }
+        })
     }
 }
