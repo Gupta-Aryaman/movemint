@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		80265BEF2B92582D00ED8DF9 /* Intents.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 80265BEE2B92582D00ED8DF9 /* Intents.intentdefinition */; };
 		804A76BA2B8E469000A6FC11 /* smooth_movesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76B92B8E469000A6FC11 /* smooth_movesApp.swift */; };
 		804A76BC2B8E469000A6FC11 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76BB2B8E469000A6FC11 /* ContentView.swift */; };
 		804A76BE2B8E469000A6FC11 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76BD2B8E469000A6FC11 /* Item.swift */; };
 		804A76C02B8E469400A6FC11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 804A76BF2B8E469400A6FC11 /* Assets.xcassets */; };
 		804A76C32B8E469400A6FC11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 804A76C22B8E469400A6FC11 /* Preview Assets.xcassets */; };
-		804A76F12B8E4F1100A6FC11 /* Intent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804A76F02B8E4F1100A6FC11 /* Intent.swift */; };
 		808289342B99B45900A0C359 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 808289332B99B45900A0C359 /* GoogleService-Info.plist */; };
 		80C0B4882B9C30400058DA7B /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 80C0B4872B9C30400058DA7B /* Auth */; };
 		80C0B48A2B9C30400058DA7B /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 80C0B4892B9C30400058DA7B /* Functions */; };
@@ -39,7 +37,6 @@
 /* Begin PBXFileReference section */
 		80265BCD2B92580900ED8DF9 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		80265BD82B92580A00ED8DF9 /* IntentsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IntentsUI.framework; path = System/Library/Frameworks/IntentsUI.framework; sourceTree = SDKROOT; };
-		80265BEE2B92582D00ED8DF9 /* Intents.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Intents.intentdefinition; sourceTree = "<group>"; };
 		804A76B62B8E469000A6FC11 /* smooth-moves.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "smooth-moves.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		804A76B92B8E469000A6FC11 /* smooth_movesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = smooth_movesApp.swift; sourceTree = "<group>"; };
 		804A76BB2B8E469000A6FC11 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -47,7 +44,6 @@
 		804A76BF2B8E469400A6FC11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		804A76C22B8E469400A6FC11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		804A76E72B8E46E700A6FC11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		804A76F02B8E4F1100A6FC11 /* Intent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intent.swift; sourceTree = "<group>"; };
 		808289332B99B45900A0C359 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -80,7 +76,6 @@
 		804A76AD2B8E469000A6FC11 = {
 			isa = PBXGroup;
 			children = (
-				80265BEE2B92582D00ED8DF9 /* Intents.intentdefinition */,
 				804A76B82B8E469000A6FC11 /* smooth-moves */,
 				80265BCC2B92580900ED8DF9 /* Frameworks */,
 				804A76B72B8E469000A6FC11 /* Products */,
@@ -100,7 +95,6 @@
 			children = (
 				804A76E72B8E46E700A6FC11 /* Info.plist */,
 				804A76B92B8E469000A6FC11 /* smooth_movesApp.swift */,
-				804A76F02B8E4F1100A6FC11 /* Intent.swift */,
 				804A76BB2B8E469000A6FC11 /* ContentView.swift */,
 				804A76BD2B8E469000A6FC11 /* Item.swift */,
 				808289332B99B45900A0C359 /* GoogleService-Info.plist */,
@@ -223,9 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				804A76BC2B8E469000A6FC11 /* ContentView.swift in Sources */,
-				804A76F12B8E4F1100A6FC11 /* Intent.swift in Sources */,
 				804A76BE2B8E469000A6FC11 /* Item.swift in Sources */,
-				80265BEF2B92582D00ED8DF9 /* Intents.intentdefinition in Sources */,
 				804A76BA2B8E469000A6FC11 /* smooth_movesApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
