@@ -28,5 +28,6 @@ struct smooth_movesApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
+        
     }
 }

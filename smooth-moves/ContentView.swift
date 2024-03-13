@@ -4,6 +4,7 @@ import Supabase
       
 struct MyViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ViewController {
+        
         return ViewController()
     }
     
@@ -48,45 +49,72 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     let buttonWidth: CGFloat = 250
     let buttonHeight: CGFloat = 50
     let spacing: CGFloat = 15
+    var vert: CGFloat = 150
     var buttonTypes = ["push", "pull", "smile", "blink left eye", "blink right eye"]
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        view.backgroundColor = UIColor.white
-        let titleLabel = UILabel(frame: CGRect(x: 0, y: 50, width: view.frame.width, height: 50))
+        view.backgroundColor = UIColor.black
+        let titleLabel = UILabel()
         titleLabel.text = "Smooth Moves"
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 40)
-        view.addSubview(titleLabel)
+        titleLabel.font = UIFont.systemFont(ofSize: 32)
+        titleLabel.textColor = UIColor.systemBlue
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+                view.addSubview(titleLabel)
+                
+        NSLayoutConstraint.activate([titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10), titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),     titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15)])
         
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: buttonX, y: buttonY-50, width: buttonWidth, height: buttonHeight)
-        button.setTitle("Server", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-        button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-        button.layer.cornerRadius = 10
+        button.setTitle("Import Shortcuts", for: .normal)
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        button.titleLabel?.numberOfLines = 0 // Allow multiline
+        button.titleLabel?.lineBreakMode = .byWordWrapping // Word wrapping
+        button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        button.layer.cornerRadius = 28
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // Add padding
         button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
         view.addSubview(button)
-        
-        let addButton = UIButton(type: .system)
-         addButton.frame = CGRect(x: (view.frame.width - 50) / 2, y: view.frame.height - 150, width: 50, height: 50)
-         addButton.setTitle("+", for: .normal)
-         addButton.setTitleColor(.white, for: .normal)
-         addButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
-         addButton.backgroundColor = UIColor.black
-         addButton.layer.cornerRadius = addButton.frame.width / 2
-         addButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
-         view.addSubview(addButton)
-        
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
-        scrollView.contentSize = CGSize(width: view.frame.width, height: buttonY + spacing)
-        scrollView.addSubview(view)
-        view = scrollView
-    }
 
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.widthAnchor.constraint(equalToConstant: 200),
+            button.heightAnchor.constraint(greaterThanOrEqualToConstant: 55)
+        ])
+
+
+        let addButton = UIButton(type: .system)
+        addButton.setTitle("+", for: .normal)
+        addButton.setTitleColor(.systemBlue, for: .normal)
+        addButton.titleLabel?.font = UIFont.systemFont(ofSize: 60, weight: .light)
+        addButton.layer.cornerRadius = 30
+        addButton.layer.borderWidth = 0
+        addButton.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        addButton.layer.borderColor = UIColor.white.cgColor
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 10, right: 5)
+        addButton.layer.shadowColor = UIColor.white.cgColor
+        addButton.layer.shadowOffset = CGSize(width: 0, height: 0)
+        addButton.layer.shadowRadius = 20
+        addButton.layer.shadowOpacity = 0.5
+        addButton.layer.masksToBounds = false
+
+        addButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
+            view.addSubview(addButton)
+            
+        NSLayoutConstraint.activate([
+                addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+                addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
+                addButton.widthAnchor.constraint(equalToConstant: 60),
+                addButton.heightAnchor.constraint(equalToConstant: 60)
+            ])
+        
+    }
+    
     @objc func buttonPressed(_ sender: UIButton) {
         Task {
                 await getShortcutsList()
@@ -167,9 +195,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                         x: buttonX, y: buttonY,
                         width: buttonWidth, height: buttonHeight)
                 button.setTitle(option, for: .normal)
-                button.setTitleColor(.black, for: .normal)
-                button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-                button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+                button.setTitleColor(.systemBlue, for: .normal)
+                button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .light)
+                button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
                 button.layer.cornerRadius = 10
                 button.addTarget(self, action: #selector(self.removeShortcutButton(_:)), for: .touchUpInside)
                 button.dropDownButtonObj = sender
@@ -193,19 +221,25 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     
     @objc func removeShortcutButton(_ button: removedShortcutButton) {
         button.dropDownButtonObj.isEnabled = true
-        print(2)
         if let name = button.title(for: .normal) {
             forbiddenOptionsList.removeAll { $0 == name }
             
+            // Iterate through buttonMappingDict to find the button corresponding to the removed shortcut
             for (key, value) in buttonMappingDict{
-                
-                if value == name{
-                    for obj in commandButtonList{
-                        if(obj.title(for: .normal) == key){
-                            obj.setTitle("test", for: .normal)
+                if value == name {
+                    for obj in commandButtonList {
+                        if obj.title(for: .normal) == key {
+                            // Update button properties
+                            obj.setTitle(key, for: .normal)
+                            obj.setTitleColor(.systemBlue, for: .normal)
+                            obj.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .light)
+                            obj.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+                            obj.layer.cornerRadius = 10
+                            let newWidth = min(buttonWidth, obj.frame.width + buttonWidth)
+                                                    obj.frame.size.width = newWidth
+                            buttonMappingDict.removeValue(forKey: key)
                         }
                     }
-                    buttonMappingDict.removeValue(forKey: key)
                 }
             }
         }
@@ -228,10 +262,10 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         let button = UIButton(type: .system)
         button.frame = CGRect(x: buttonX, y: yPos, width: buttonWidth, height: buttonHeight)
         button.setTitle(name, for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
-        button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
-        button.layer.cornerRadius = 10 // Rounded corners
+        button.setTitleColor(.systemBlue, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .light)
+        button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
+        button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         view.addSubview(button)
         
@@ -241,8 +275,8 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         dropdownButton.backgroundColor = UIColor.black //
         dropdownButton.layer.cornerRadius = 5 // Rounded corners
-        dropdownButton.layer.borderColor = UIColor.black.cgColor
-        dropdownButton.layer.borderWidth = 5
+        dropdownButton.layer.borderColor = UIColor.white.cgColor
+        dropdownButton.layer.borderWidth = 0
         dropdownButton.addTarget(self, action: #selector(dropdownTapped(_:)), for: .touchUpInside)
         dropdownButton.parentButtonObj = button
         view.addSubview(dropdownButton)
