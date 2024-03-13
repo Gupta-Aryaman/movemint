@@ -7,10 +7,12 @@
 
 import SwiftUI
 import SwiftData
-
 @main
 struct smooth_movesApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
     var sharedModelContainer: ModelContainer = {
+
         let schema = Schema([
             Item.self,
         ])
@@ -22,7 +24,7 @@ struct smooth_movesApp: App {
             fatalError("Could not create ModelContainer: \(error)")
         }
     }()
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
