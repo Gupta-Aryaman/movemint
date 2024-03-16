@@ -49,6 +49,23 @@
             ReferencedContainer = "container:smooth-moves.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SUPABASE_URI"
+            value = "https://sdnughqozcihjgayznuf.supabase.co"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "SUPABASE_KEY"
+            value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkbnVnaHFvemNpaGpnYXl6bnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MDE1MTEsImV4cCI6MjAyNTM3NzUxMX0.KQWPMpj-CWPAVExhwJ6yDG_17lAKkNAizmNvMmHytWs"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "ref"
+            value = "https://smooth-moves-7b7a2-default-rtdb.firebaseio.com/"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

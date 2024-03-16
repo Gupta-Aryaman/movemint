@@ -39,7 +39,24 @@ struct shortcutTable: Decodable {
 class removedShortcutButton: UIButton{
     var dropDownButtonObj: CustomDropdownButton = CustomDropdownButton()
 }
-let client = SupabaseClient(supabaseURL: URL(string: "url")!, supabaseKey: "supabase key")
+
+var supabaseURI: String = {
+    if let uri = ProcessInfo.processInfo.environment["SUPABASE_URI"] {
+        return uri
+    } else {
+        return "URI Not Found"
+    }
+}()
+
+var supabaseKEY: String = {
+    if let key = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
+        return key
+    } else {
+        return "Key Not Found"
+    }
+}()
+
+let client = SupabaseClient(supabaseURL: URL(string: supabaseURI)!, supabaseKey: supabaseKEY)
 
 var forbiddenOptionsList = [String]()
 var options = [String]()
@@ -48,7 +65,7 @@ var buttonMappingDict = [String: String]()
 var commandButtonList = [UIButton]()
 
 class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDelegate {
-
+        
     let buttonX: CGFloat = 50
     var buttonY: CGFloat = 150
     let buttonWidth: CGFloat = 250
@@ -57,78 +74,174 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     var vert: CGFloat = 150
     var buttonTypes = ["push", "pull", "smile", "blink left eye", "blink right eye"]
     var ref: DatabaseReference!
+    var UUID: String = ""
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         FirebaseApp.configure()
-        self.ref = Database.database().reference() //fill up firebase url
-        Task {
-                await monitorFirebase()
+        if let databaseURL = ProcessInfo.processInfo.environment["ref"] {
+            self.ref = Database.database(url: databaseURL).reference()
+        } else {
+
+            print("Error: Environment variable 'ref' not found.")
         }
+        
+        Task {
+            await monitorFirebase()
+        }
+        
         view.backgroundColor = UIColor.black
+        
         let titleLabel = UILabel()
-        titleLabel.text = "Smooth Moves"
-        titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 36)
-        titleLabel.textColor = UIColor.systemBlue
+        titleLabel.textAlignment = .left
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-                view.addSubview(titleLabel)
-                
-        NSLayoutConstraint.activate([titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10), titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),     titleLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -15)])
+        view.addSubview(titleLabel)
         
-        let button = UIButton(type: .system)
-        button.setTitle("Import Shortcuts", for: .normal)
-        button.setTitleColor(.systemBlue, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 20)
-        button.titleLabel?.numberOfLines = 0 // Allow multiline
-        button.titleLabel?.lineBreakMode = .byWordWrapping // Word wrapping
-        button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
-        button.layer.cornerRadius = 28
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) // Add padding
-        button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
-        view.addSubview(button)
-
+        let attributedText = NSMutableAttributedString(string: "Smooth Moves")
+        let regularFont = UIFont.systemFont(ofSize: 32, weight: .thin)
+        let biggerFont = UIFont.systemFont(ofSize: 32, weight: .bold)
+        attributedText.addAttribute(.font, value: regularFont, range: NSRange(location: 0, length: 6))
+        attributedText.addAttribute(.font, value: biggerFont, range: NSRange(location: 7, length: 5))
+        titleLabel.attributedText = attributedText
+        
+        titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        titleLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 25).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant: 250).isActive = true
+        
+        titleLabel.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        UIView.animate(withDuration: 1.2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.4, options: [], animations: {
+            titleLabel.transform = .identity
+            titleLabel.alpha = 1
+        }, completion: nil)
+        
+        let plusButton = UIButton(type: .system)
+        plusButton.setTitle("+", for: .normal)
+        plusButton.setTitleColor(.systemBlue, for: .normal)
+        plusButton.titleLabel?.font = UIFont.systemFont(ofSize: 48, weight: .light)
+        plusButton.translatesAutoresizingMaskIntoConstraints = false
+        plusButton.addTarget(self, action: #selector(createSiriShortcut(_:)), for: .touchUpInside)
+        view.addSubview(plusButton)
+        
+        plusButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        plusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -25).isActive = true
+        plusButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        plusButton.transform = CGAffineTransform(translationX: view.bounds.width, y: 0)
+        UIView.animate(withDuration: 1.2, delay: 0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.4, options: [], animations: {
+            plusButton.transform = .identity
+            plusButton.alpha = 1
+        }, completion: nil)
+        
+        let runSiriShortcutButton = UIButton(type: .system)
+        runSiriShortcutButton.setTitle("Run Siri Shortcut", for: .normal)
+        runSiriShortcutButton.setTitleColor(.systemBlue, for: .normal)
+        runSiriShortcutButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        runSiriShortcutButton.titleLabel?.numberOfLines = 0
+        runSiriShortcutButton.titleLabel?.lineBreakMode = .byWordWrapping
+        runSiriShortcutButton.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2)
+        runSiriShortcutButton.layer.cornerRadius = 28
+        runSiriShortcutButton.translatesAutoresizingMaskIntoConstraints = false
+        runSiriShortcutButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        runSiriShortcutButton.addTarget(self, action: #selector(runSiriShortcutButton(_:)), for: .touchUpInside)
+        view.addSubview(runSiriShortcutButton)
+        
         NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.widthAnchor.constraint(equalToConstant: 200),
-            button.heightAnchor.constraint(greaterThanOrEqualToConstant: 55)
+            runSiriShortcutButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            runSiriShortcutButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            runSiriShortcutButton.widthAnchor.constraint(equalToConstant: 175),
+            runSiriShortcutButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 55)
         ])
-
-
-        let addButton = UIButton(type: .system)
-        addButton.setTitle("+", for: .normal)
-        addButton.setTitleColor(.systemBlue, for: .normal)
-        addButton.titleLabel?.font = UIFont.systemFont(ofSize: 60, weight: .light)
-        addButton.layer.cornerRadius = 30
-        addButton.layer.borderWidth = 0
-        addButton.backgroundColor = UIColor.white.withAlphaComponent(0.1)
-        addButton.layer.borderColor = UIColor.white.cgColor
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 10, right: 5)
-        addButton.layer.shadowColor = UIColor.white.cgColor
-        addButton.layer.shadowOffset = CGSize(width: 0, height: 0)
-        addButton.layer.shadowRadius = 20
-        addButton.layer.shadowOpacity = 0.5
-        addButton.layer.masksToBounds = false
-
-        addButton.addTarget(self, action: #selector(plusButtonPressed(_:)), for: .touchUpInside)
-            view.addSubview(addButton)
-            
-        NSLayoutConstraint.activate([
-                addButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-                addButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -30),
-                addButton.widthAnchor.constraint(equalToConstant: 60),
-                addButton.heightAnchor.constraint(equalToConstant: 60)
-            ])
         
+        runSiriShortcutButton.transform = CGAffineTransform(translationX: -50, y: 0)
+        runSiriShortcutButton.alpha = 0
+        
+        UIView.animate(withDuration: 1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
+            runSiriShortcutButton.transform = .identity
+            runSiriShortcutButton.alpha = 1
+        }, completion: nil)
+        
+        let importButton = UIButton(type: .system)
+        importButton.setTitle("Import Shortcuts", for: .normal)
+        importButton.setTitleColor(.systemBlue, for: .normal)
+        importButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        importButton.titleLabel?.numberOfLines = 0
+        importButton.titleLabel?.lineBreakMode = .byWordWrapping
+        importButton.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2)
+        importButton.layer.cornerRadius = 28
+        importButton.translatesAutoresizingMaskIntoConstraints = false
+        importButton.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        importButton.addTarget(self, action: #selector(importButtonPressed(_:)), for: .touchUpInside)
+        view.addSubview(importButton)
+        
+        NSLayoutConstraint.activate([
+            importButton.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            importButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            importButton.widthAnchor.constraint(equalToConstant: 175),
+            importButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 55),
+            importButton.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        ])
+        
+        importButton.transform = CGAffineTransform(translationX: 50, y: 0)
+        importButton.alpha = 0
+        
+        UIView.animate(withDuration: 1.5, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
+            importButton.transform = .identity
+            importButton.alpha = 1
+        }, completion: nil)
+        
+        let actionsButton = UIButton(type: .system)
+        actionsButton.setTitle("Actions  ▼", for: .normal)
+        actionsButton.setTitleColor(.systemBlue, for: .normal)
+        actionsButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        actionsButton.titleLabel?.numberOfLines = 0
+        actionsButton.titleLabel?.lineBreakMode = .byWordWrapping
+        actionsButton.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2)
+        actionsButton.layer.cornerRadius = 28
+        actionsButton.translatesAutoresizingMaskIntoConstraints = false
+        actionsButton.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        actionsButton.addTarget(self, action: #selector(actionsButtonPressed(_:)), for: .touchUpInside)
+        view.addSubview(actionsButton)
+        
+        actionsButton.transform = CGAffineTransform(translationX: 0, y: 50)
+        actionsButton.alpha = 0
+        
+        NSLayoutConstraint.activate([
+            actionsButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
+            actionsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            actionsButton.widthAnchor.constraint(equalToConstant: 120),
+            actionsButton.heightAnchor.constraint(equalToConstant: 60)
+        ])
+        
+        UIView.animate(withDuration: 1.2, delay: 0.2, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
+            actionsButton.transform = .identity
+            actionsButton.alpha = 1
+        }, completion: nil)
     }
     
-    @objc func buttonPressed(_ sender: UIButton) {
+    @objc func importButtonPressed(_ sender: UIButton) {
         Task {
-                await getShortcutsList()
+            await getShortcutsList()
+        }
+        NotificationView.showNotification(message: "Shortcuts imported successfully!", backgroundColor: UIColor.systemYellow)
+    }
+    
+    @objc func createSiriShortcut(_ sender: UIButton) {
+        print("Button \(sender.title(for: .normal) ?? "") tapped.")
+        
+        guard let buttonName = sender.title(for: .normal) else { return }
+            if let shortcutURL = URL(string: "https://www.icloud.com/shortcuts/20fd8d4e5e694d748a371a2af7356d12") {
+                UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+        }
+    }
+    
+    @objc func runSiriShortcutButton(_ sender: UIButton) {
+        print("Button \(sender.title(for: .normal) ?? "") tapped.")
+        
+        guard let buttonName = sender.title(for: .normal) else { return }
+        if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=Export Shortcuts&input=\(self.UUID)") {
+                UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
             }
     }
     
@@ -143,15 +256,13 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }
     }
     
-    @objc func plusButtonPressed(_ sender: UIButton) {
+    @objc func actionsButtonPressed(_ sender: UIButton) {
         let dropdownMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         for option in buttonTypes {
             dropdownMenu.addAction(UIAlertAction(title: option, style: .default, handler: { (_) in
                 print("Selected option: \(option)")
                 self.updateAvailableButtonOptions(selectedOption: option)
-                let buttonX: CGFloat = 50
-                let buttonWidth: CGFloat = 250
                 let buttonHeight: CGFloat = 50
                 let spacing: CGFloat = 15
                 self.createButton(name: option, atYPosition: self.buttonY)
@@ -168,15 +279,11 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }
         
         self.present(dropdownMenu, animated: true, completion: nil)
-                
+        
     }
     
     @objc func dropdownTapped(_ sender: CustomDropdownButton)  {
-                
-        guard let button = sender.superview?.subviews.compactMap({ $0 as? UIButton }).first(where: { $0.title(for: .normal) != nil }) else { return }
         
-        guard let buttonName = button.title(for: .normal) else { return }
-                
         let dropdownMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
         for option in options {
@@ -191,9 +298,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 let parentButtonObj = sender.parentButtonObj
                 let newWidth = parentButtonObj.frame.width / 2
                 let newX = dropdownMenu.view.frame.origin.x - newWidth
-                parentButtonObj.frame = CGRect(
-                    x: newX+167, y: sender.frame.origin.y,
-                    width: newWidth, height: sender.frame.height)
+                UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseInOut, animations: {
+                    parentButtonObj.frame = CGRect(x: newX + 167, y: sender.frame.origin.y, width: newWidth, height: sender.frame.height)
+                }, completion: nil)
                 
                 let verticalSpacing: CGFloat = 10
                 let buttonWidth = newWidth - 10
@@ -203,14 +310,18 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 
                 let button = removedShortcutButton(type: .custom)
                 button.frame = CGRect(
-                        x: buttonX, y: buttonY,
-                        width: buttonWidth, height: buttonHeight)
+                    x: buttonX, y: buttonY,
+                    width: buttonWidth, height: buttonHeight)
                 button.setTitle(option, for: .normal)
                 button.setTitleColor(.systemBlue, for: .normal)
                 button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .light)
                 button.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
                 button.layer.cornerRadius = 10
                 button.addTarget(self, action: #selector(self.removeShortcutButton(_:)), for: .touchUpInside)
+                button.transform = CGAffineTransform(scaleX: 1, y: 1.5)
+                UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+                    button.transform = .identity
+                }, completion: nil)
                 button.dropDownButtonObj = sender
                 self.view.addSubview(button)
                 
@@ -244,7 +355,9 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                             obj.backgroundColor = UIColor.lightGray.withAlphaComponent(0.2)
                             obj.layer.cornerRadius = 10
                             let newWidth = min(buttonWidth, obj.frame.width + buttonWidth)
-                            obj.frame.size.width = newWidth
+                            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.5, options: .curveEaseInOut, animations: {
+                                obj.frame.size.width = newWidth
+                            }, completion: nil)
                             buttonMappingDict.removeValue(forKey: key)
                         }
                     }
@@ -253,7 +366,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }
         button.removeFromSuperview()
     }
-
+    
     func findDropdownButton(from view: UIView) -> CustomDropdownButton? {
         var currentView: UIView? = view.superview
         while currentView != nil {
@@ -264,11 +377,11 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }
         return nil
     }
-   
+    
     func createButton(name: String, atYPosition yPos: CGFloat) {
         
         let button = UIButton(type: .system)
-        button.frame = CGRect(x: buttonX, y: yPos, width: buttonWidth, height: buttonHeight)
+        button.frame = CGRect(x: buttonX, y: yPos+20, width: buttonWidth, height: buttonHeight)
         button.setTitle(name, for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .light)
@@ -278,7 +391,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         view.addSubview(button)
         
         let dropdownButton = CustomDropdownButton(type: .custom)
-        dropdownButton.frame = CGRect(x: button.frame.maxX + 10, y: yPos, width: 30, height: buttonHeight)
+        dropdownButton.frame = CGRect(x: button.frame.maxX + 10, y: yPos+20, width: 30, height: buttonHeight)
         dropdownButton.setTitle("▼", for: .normal)
         dropdownButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 24)
         dropdownButton.backgroundColor = UIColor.black //
@@ -291,25 +404,38 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         buttonOptions[name] = Set(options)
         
         commandButtonList.append(button)
+        
+        
+        button.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
+        dropdownButton.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.1, options: [], animations: {
+            button.alpha = 1 // Fade-in animation
+            dropdownButton.alpha = 1 // Fade-in animation
+            button.transform = .identity
+            dropdownButton.transform = .identity
+        }, completion: nil)
+        NotificationView.showNotification(message: "Button created successfully!", backgroundColor: UIColor.systemGreen)
+        
     }
     
     func getShortcutsList() async {
         do {
             let shorties: [shortcutTable] = try await client.database.from("smooth-moves").select("shortcut_list").execute().value
             options = []
-
-                if let lastShortcutTable = shorties.last {
-                    lastShortcutTable.shortcut_list.forEach { element in
-                        options.append(element)
-                    }
-                } else {
-                    print("The array is empty.")
+            
+            if let lastShortcutTable = shorties.last {
+                lastShortcutTable.shortcut_list.forEach { element in
+                    options.append(element)
+                }
+                
+            } else {
+                print("The array is empty.")
             }
         } catch{
             debugPrint(error)
         }
     }
-
+    
     func updateAvailableOptions(selectedOption: String) {
         for buttonName in buttonOptions.keys {
             buttonOptions[buttonName]?.remove(selectedOption)
@@ -333,7 +459,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     func monitorFirebase() async{
         ref.child("blink left eye").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
-                let enabled = value["enabled"] as? Int {
+               let enabled = value["enabled"] as? Int {
                 if(enabled == 1){
                     
                     if let title = buttonMappingDict["blink left eye"] {
@@ -349,7 +475,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         
         ref.child("blink right eye").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
-                let enabled = value["enabled"] as? Int {
+               let enabled = value["enabled"] as? Int {
                 if(enabled == 1){
                     
                     if let title = buttonMappingDict["blink right eye"] {
@@ -365,7 +491,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         
         ref.child("smile").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
-                let enabled = value["enabled"] as? Int {
+               let enabled = value["enabled"] as? Int {
                 if(enabled == 1){
                     
                     if let title = buttonMappingDict["smile"] {
@@ -381,7 +507,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         
         ref.child("push").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
-                let enabled = value["enabled"] as? Int {
+               let enabled = value["enabled"] as? Int {
                 if(enabled == 1){
                     
                     if let title = buttonMappingDict["push"] {
@@ -397,7 +523,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         
         ref.child("pull").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
-                let enabled = value["enabled"] as? Int {
+               let enabled = value["enabled"] as? Int {
                 if(enabled == 1){
                     
                     if let title = buttonMappingDict["pull"] {
