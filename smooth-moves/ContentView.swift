@@ -5,6 +5,8 @@ import Supabase
 import FirebaseCore
 import FirebaseFirestore
 import FirebaseAuth
+import Foundation
+import SwiftData
 
 struct MyViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> ViewController {
@@ -17,6 +19,11 @@ struct MyViewControllerWrapper: UIViewControllerRepresentable {
 }
 
 struct ContentView: View {
+    
+    @Environment(\.modelContext) private var context
+    
+    @Query private var items:  [Data]
+    
     var body: some View {
         MyViewControllerWrapper()
     }
@@ -40,23 +47,28 @@ class removedShortcutButton: UIButton{
     var dropDownButtonObj: CustomDropdownButton = CustomDropdownButton()
 }
 
-var supabaseURI: String = {
-    if let uri = ProcessInfo.processInfo.environment["SUPABASE_URI"] {
-        return uri
-    } else {
-        return "URI Not Found"
-    }
-}()
+//var supabaseURI: String = {
+//    if let uri = ProcessInfo.processInfo.environment["SUPABASE_URI"] {
+//        return uri
+//    } else {
+//        return "URI Not Found"
+//    }
+//}()
+//
+//var supabaseKEY: String = {
+//    if let key = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
+//        return key
+//    } else {
+//        return "Key Not Found"
+//    }
+//}()
+//
+//
+//
+//let client = SupabaseClient(supabaseURL: URL(string: supabaseURI)!, supabaseKey: supabaseKEY)
+//
 
-var supabaseKEY: String = {
-    if let key = ProcessInfo.processInfo.environment["SUPABASE_KEY"] {
-        return key
-    } else {
-        return "Key Not Found"
-    }
-}()
 
-let client = SupabaseClient(supabaseURL: URL(string: supabaseURI)!, supabaseKey: supabaseKEY)
 
 var forbiddenOptionsList = [String]()
 var options = [String]()
@@ -64,8 +76,11 @@ var buttonMappingDict = [String: String]()
 
 var commandButtonList = [UIButton]()
 
+
+
 class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDelegate {
-        
+
+    let defaults = UserDefaults.standard
     let buttonX: CGFloat = 50
     var buttonY: CGFloat = 150
     let buttonWidth: CGFloat = 250
@@ -75,19 +90,25 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     var buttonTypes = ["push", "pull", "smile", "blink left eye", "blink right eye"]
     var ref: DatabaseReference!
     var UUID: String = ""
+    let uuidKey = "vaibhav.smooth-moves"
+//    self.UUID = NSUUID().uuidString
+//    cache.setObject(UUID, forKey: "UUID")
+    
+    
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
         FirebaseApp.configure()
-        if let databaseURL = ProcessInfo.processInfo.environment["ref"] {
-            self.ref = Database.database(url: databaseURL).reference()
-        } else {
-
-            print("Error: Environment variable 'ref' not found.")
-        }
-        
+//        if let databaseURL = ProcessInfo.processInfo.environment["ref"] {
+//            self.ref = Database.database(url: databaseURL).reference()
+//        } else {
+//
+//            print("Error: Environment variable 'ref' not found.")
+//        }
+        self.getUUID()
+        ref = Database.database(url: "").reference()
         Task {
             await monitorFirebase()
         }
@@ -220,6 +241,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }, completion: nil)
     }
     
+    
     @objc func importButtonPressed(_ sender: UIButton) {
         Task {
             await getShortcutsList()
@@ -247,7 +269,6 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     
     @objc func buttonTapped(_ sender: UIButton) {
         print("Button \(sender.title(for: .normal) ?? "") tapped.")
-        
         guard let buttonName = sender.title(for: .normal) else { return }
         if let title = buttonMappingDict[buttonName] {
             if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
@@ -420,7 +441,13 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
     
     func getShortcutsList() async {
         do {
-            let shorties: [shortcutTable] = try await client.database.from("smooth-moves").select("shortcut_list").execute().value
+            let shorties: [shortcutTable] = try await client.database
+                .from("smooth-moves")
+                .select("shortcut_list")
+                .eq("UUID", value: self.UUID) // Add your where clause here
+                .execute()
+                .value
+
             options = []
             
             if let lastShortcutTable = shorties.last {
@@ -536,5 +563,30 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                 }
             }
         })
+    }
+        
+    func cacheUUID(_ uuid: UUID, forKey key: String) {
+            UserDefaults.standard.set(uuid.uuidString, forKey: key)
+    }
+
+    func getCachedUUID(forKey key: String) -> UUID? {
+            if let uuidString = UserDefaults.standard.string(forKey: key) {
+                return Foundation.UUID(uuidString: uuidString)
+            }
+        let uuid = Foundation.UUID()
+        if let uuidString = UserDefaults.standard.string(forKey: key) {
+            return Foundation.UUID(uuidString: uuidString)
+        }
+        return nil
+    }
+        
+    func getUUID() {
+        if let uuid = defaults.string(forKey: "uuid") {
+            self.UUID = uuid
+        } else {
+            self.UUID = Foundation.UUID().uuidString
+            defaults.set(self.UUID, forKey: "uuid")
+        }
+        print(self.UUID)
     }
 }
