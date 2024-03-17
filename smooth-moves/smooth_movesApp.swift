@@ -30,6 +30,6 @@ struct smooth_movesApp: App {
             ContentView()
         }
         .modelContainer(sharedModelContainer)
-        
+        .modelContainer(for: Data.self)
     }
 }
