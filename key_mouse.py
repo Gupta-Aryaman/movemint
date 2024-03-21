@@ -2,8 +2,10 @@ import os
 from dotenv import load_dotenv
 from websocket import create_connection
 import json
-import vgamepad as vg
 import math
+import pyautogui
+import numpy as np
+import vgamepad as vg
 
 gamepad = vg.VX360Gamepad()
 
@@ -84,7 +86,6 @@ print(subscribe)
 print( "Sent")
 print( "Receiving...")
 
-
 def give_roll_pitch(quat):
     # Normalize the quaternion
     quat_mag = math.sqrt(sum(x * x for x in quat))
@@ -105,10 +106,17 @@ def give_roll_pitch(quat):
 
     return mapped_roll, mapped_pitch
 
+
+def convert_coordinates(x_old, y_old):
+    new_x = int((x_old + 1.0) * 1919 / 2)
+    new_y = int((y_old + 1.0) * 1079 / 2)
+    return new_x, new_y
+
 result = ws.recv()
 result = json.loads(result)
 
 init_mapped_roll, init_mapped_pitch = give_roll_pitch(result["mot"][8:12])
+x_center, y_center = init_mapped_roll, init_mapped_pitch
 
 while True:
     result = ws.recv()
@@ -119,31 +127,36 @@ while True:
         action = result["com"][0]
         power = result["com"][1]
 
-        if action == "push" and power >= 0.6:
-            gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+        if action == "push" and power >= 0.5:
+            pyautogui.keyDown('w')
             print("Received ", result)
+        # if action == "lift" and power >= 0.5:
+        #     gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+        #     print("Received ", result)
         else:
-            gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
+            pyautogui.keyUp('w')
         
 
-    if "mot" in result:
-        quat = [result["mot"][8], result["mot"][9], result["mot"][10], result["mot"][11]]
-        mapped_roll, mapped_pitch = give_roll_pitch(quat)
+    # elif "mot" in result:
+    #     quat = [result["mot"][8], result["mot"][9], result["mot"][10], result["mot"][11]]
+    #     mapped_roll, mapped_pitch = give_roll_pitch(quat)
 
-        gamepad.right_joystick_float(x_value_float= mapped_roll - init_mapped_roll , y_value_float = mapped_pitch - init_mapped_pitch)
+    #     gamepad.right_joystick_float(x_value_float= mapped_roll - init_mapped_roll , y_value_float = mapped_pitch - init_mapped_pitch)
+    #     gamepad.update()
 
-    if "fac" in result:
+    elif "fac" in result:
         action = result["fac"][3]
         power = result["fac"][4]
 
         if action == "smile" and power >= 0.8:
-            gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+            gamepad.press_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
             print("Received ", result)
         else:
-            gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_DPAD_UP)
+            gamepad.release_button(button=vg.XUSB_BUTTON.XUSB_GAMEPAD_A)
 
-        # print("Received ", result)
+        gamepad.update()
 
-    gamepad.update()
+
+    
 
 ws.close
