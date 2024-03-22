@@ -131,32 +131,34 @@ while True:
         
 
     elif "fac" in result:
+        eyeAct = result["fac"][0]
         action = result["fac"][3]
-        power = result["fac"][4]
+        lpower = result["fac"][4]
+        upower = result["fac"][2]
 
-        if action == "smile" and power >= 0.8:
+        if action == "smile" and lpower >= 0.8:
             flag = True
             db.reference("/smile").set({"enabled": True})
             print("Received ", result)
-        elif action == "furrow brows" and power >= 0.8:
+        elif action == "frown" and upower >= 0.8: # frown == furrow brows
             flag = True
-            db.reference("/furrow brows").set({"enabled": True})
+            db.reference("/frown").set({"enabled": True})
             print("Received ", result)
-        elif action == "clench teeth" and power >= 0.8:
+        elif action == "clench" and lpower >= 0.8:
             flag = True
-            db.reference("/clench teeth").set({"enabled": True})
+            db.reference("/clench").set({"enabled": True})
             print("Received ", result)
-        elif action == "raise brows" and power >= 0.8:
+        elif action == "surprise" and upower >= 0.8: #surprise == raise brows
             flag = True
-            db.reference("/raise brows").set({"enabled": True})
+            db.reference("/surprise").set({"enabled": True})
             print("Received ", result)
-        elif action == "wink left" and power >= 0.8:
+        elif eyeAct == "winkL":
             flag = True
-            db.reference("/wink left").set({"enabled": True})
+            db.reference("/winkL").set({"enabled": True})
             print("Received ", result)
-        elif action == "wink right" and power >= 0.8:
+        elif eyeAct == "winkR":
             flag = True
-            db.reference("/wink right").set({"enabled": True})
+            db.reference("/winkR").set({"enabled": True})
             print("Received ", result)
 
         # print("Received ", result)
