@@ -69,6 +69,9 @@ class removedShortcutButton: UIButton{
 //
 
 
+let client = SupabaseClient(supabaseURL: URL(string: "https://sdnughqozcihjgayznuf.supabase.co")!, supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNkbnVnaHFvemNpaGpnYXl6bnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4MDE1MTEsImV4cCI6MjAyNTM3NzUxMX0.KQWPMpj-CWPAVExhwJ6yDG_17lAKkNAizmNvMmHytWs")
+
+
 
 var forbiddenOptionsList = [String]()
 var options = [String]()
@@ -108,7 +111,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
 //            print("Error: Environment variable 'ref' not found.")
 //        }
         self.getUUID()
-        ref = Database.database(url: "").reference()
+        ref = Database.database(url: "https://smooth-moves-7b7a2-default-rtdb.firebaseio.com/").reference()
         Task {
             await monitorFirebase()
         }
@@ -253,7 +256,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         print("Button \(sender.title(for: .normal) ?? "") tapped.")
         
         guard let buttonName = sender.title(for: .normal) else { return }
-            if let shortcutURL = URL(string: "https://www.icloud.com/shortcuts/20fd8d4e5e694d748a371a2af7356d12") {
+            if let shortcutURL = URL(string: "https://www.icloud.com/shortcuts/b60a3dd6ffec438a9ea3f4dbfe1b3ec6") {
                 UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
         }
     }
@@ -273,6 +276,16 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         if let title = buttonMappingDict[buttonName] {
             if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
                 UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
+            }
+        }
+        
+        if let appURL = URL(string: "smoothmoves://") {
+            if UIApplication.shared.canOpenURL(appURL) {
+                UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+                print("running")
+            } else {
+                // Handle if the app is not installed or cannot be opened
+                print("The app is not installed or cannot be opened.")
             }
         }
     }
@@ -483,7 +496,7 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
         }
     }
     
-    func monitorFirebase() async{
+    func monitorFirebase() async {
         ref.child("blink left eye").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
                let enabled = value["enabled"] as? Int {
@@ -493,12 +506,11 @@ class ViewController: UIViewController, NSUserActivityDelegate, UIApplicationDel
                         if let shortcutURL = URL(string: "shortcuts://run-shortcut?name=\(title)") {
                             UIApplication.shared.open(shortcutURL, options: [:], completionHandler: nil)
                         }
+                        
+                        self.ref.child("blink left eye").updateChildValues(["enabled": false])
                     }
-                    
-                    self.ref.child("blink left eye").updateChildValues(["enabled": false])
                 }
-            }
-        })
+            }})
         
         ref.child("blink right eye").observe(.value, with: {snapshot in
             if let value = snapshot.value as? NSDictionary,
