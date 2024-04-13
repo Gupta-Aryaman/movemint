@@ -99,38 +99,43 @@ result = ws.recv()
 result = json.loads(result)
 
 flag = False
+prev_action = ""
 
 while True:
     result = ws.recv()
     result = json.loads(result)
 
     
-    if "com" in result:
+    if "com" in result and prev_action != "com":
         action = result["com"][0]
         power = result["com"][1]
 
         if action == "push" and power >= 0.6:
             flag = True
+            prev_action = "com"
             db.reference("/push").set({"enabled": True})
             print("Received ", result)
 
         elif action == "pull" and power >= 0.6:
             flag = True
+            prev_action = "com"
             db.reference("/pull").set({"enabled": True})
             print("Received ", result)
 
         elif action == "lift" and power >= 0.6:
             flag = True
+            prev_action = "com"
             db.reference("/lift").set({"enabled": True})
             print("Received ", result)
 
         elif action == "drop" and power >= 0.6:
             flag = True
+            prev_action = "com"
             db.reference("/drop").set({"enabled": True})
             print("Received ", result)
         
 
-    elif "fac" in result:
+    elif "fac" in result and prev_action != "fac":
         eyeAct = result["fac"][0]
         action = result["fac"][3]
         lpower = result["fac"][4]
@@ -138,18 +143,22 @@ while True:
 
         if action == "smile" and lpower >= 0.8:
             flag = True
+            prev_action = "fac"
             db.reference("/smile").set({"enabled": True})
             print("Received ", result)
         elif action == "frown" and upower >= 0.8: # frown == furrow brows
             flag = True
+            prev_action = "fac"
             db.reference("/frown").set({"enabled": True})
             print("Received ", result)
         elif action == "clench" and lpower >= 0.8:
             flag = True
+            prev_action = "fac"
             db.reference("/clench").set({"enabled": True})
             print("Received ", result)
         elif action == "surprise" and upower >= 0.8: #surprise == raise brows
             flag = True
+            prev_action = "fac"
             db.reference("/surprise").set({"enabled": True})
             print("Received ", result)
         elif eyeAct == "winkL":
