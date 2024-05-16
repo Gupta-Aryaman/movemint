@@ -14,7 +14,8 @@
 Our objective is to develop an application aimed at simplifying (movement free) triggering of automation tasks through the use of an EEG headset.
 
 ## About the project
-![image](https://github.com/Gupta-Aryaman/smooth-moves/assets/34962578/cf2b6e69-c506-42e9-8b13-6ea2928a99fd)
+![unnamed](https://github.com/Gupta-Aryaman/smooth-moves/assets/34962578/1c721bc7-f2c9-4984-9e52-1c55cd010e97)
+
 
 ## What are we using?
 1. Emotiv API (tested with EPOC X only, but should work with any emotiv headset)
