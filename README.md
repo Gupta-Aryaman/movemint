@@ -73,7 +73,7 @@ cd smooth-moves
   pip install -r requirements.txt
   ```
 - Set up your `.env` file with Emotiv and Firebase credentials:
-  ```
+  ```bash
   clientId=YOUR_EMOTIV_CLIENT_ID
   clientSecret=YOUR_EMOTIV_CLIENT_SECRET
   firebaseDatabaseUrl=YOUR_FIREBASE_DATABASE_URL
