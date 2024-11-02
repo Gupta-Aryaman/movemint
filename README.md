@@ -119,3 +119,6 @@ Testing revealed response times vary by command type and user configuration. Men
 Potential future improvements include:
 - Generalizing the backend for use in multiple applications (e.g., gaming).
 - Expanding functionality to include features like direct BCI-to-text input, painting, or complex automation tasks.
+
+## License
+This project is licensed under [GPL-3.0 license](https://github.com/Gupta-Aryaman/smooth-moves/blob/main/LICENSE).
