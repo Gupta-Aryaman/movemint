@@ -15,7 +15,7 @@ Smooth Moves is a pioneering project combining neuroscience and automation to cr
 
 ## Demo
 ![unnamed](https://github.com/Gupta-Aryaman/smooth-moves/assets/34962578/1c721bc7-f2c9-4984-9e52-1c55cd010e97) <br>
-Clear Demo: [Demo Link](https://x.com/aryamantwts/status/1803506381028278419) <br>
+Verbose Demo: [Demo Link](https://x.com/aryamantwts/status/1803506381028278419) <br>
 Endless possibilites: [Game Control Demo Link](https://x.com/aryamantwts/status/1803510379454275623)
 
 ## Key Features
